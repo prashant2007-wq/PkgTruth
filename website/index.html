@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PkgTruth checks whether a published package matches its source, and flags releases that gain powers the source never had.">
+  <title>PkgTruth — Does your package match its source?</title>
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="aurora" aria-hidden="true"></div>
+  <div class="grid-overlay" aria-hidden="true"></div>
+  <canvas id="flowCanvas" class="flow-canvas" aria-hidden="true"></canvas>
+
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#hero">
+      <img src="assets/logo.svg" alt="" width="32" height="32">
+      <span class="brand-copy">
+        <span class="wordmark">PkgTruth</span>
+        <span class="brand-kicker">NullPointers</span>
+      </span>
+    </a>
+
+    <button class="nav-toggle" id="navToggle" type="button" aria-expanded="false" aria-controls="siteNav" aria-label="Open menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="site-nav" id="siteNav" aria-label="Primary">
+      <a href="#problem" data-section="problem">Problem</a>
+      <a href="#how" data-section="how">How it works</a>
+      <a href="#playground" data-section="playground">Playground</a>
+      <a href="#analyzer" data-section="analyzer">Analyzer</a>
+      <a href="#benchmark" data-section="benchmark">Benchmark</a>
+    </nav>
+
+    <div class="topbar-actions">
+      <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch theme">
+        <span class="theme-icon theme-icon-dark" aria-hidden="true">☾</span>
+        <span class="theme-icon theme-icon-light" aria-hidden="true">☀</span>
+      </button>
+      <a class="repo-link" href="#" data-repo-url="#" aria-label="GitHub repository (placeholder)">
+        Repo
+      </a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="hero">
+      <div class="hero-copy reveal">
+        <p class="eyebrow">Sample dashboard · Hacktoberfest 2026 Hack Day</p>
+        <h1>Does your package <span class="gradient-text">match its source?</span></h1>
+        <p class="hero-tagline" id="heroTagline" aria-live="polite"></p>
+        <p class="sr-only" id="heroSubFull">
+          PkgTruth checks whether what you install is what was reviewed, and flags any release that gains powers its source never had.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#analyzer">Try the analyzer</a>
+          <a class="btn btn-ghost" href="#playground">Tamper it yourself</a>
+        </div>
+        <ul class="trust-strip">
+          <li>No allowlists</li>
+          <li>Evidence for every verdict</li>
+          <li>Local open-weight AI</li>
+          <li>Works offline</li>
+        </ul>
+      </div>
+
+      <div class="hero-panel glass reveal" data-spotlight>
+        <div class="panel-label">
+          <span>Recorded split view</span>
+          <span class="sample-pill">Sample report</span>
+        </div>
+        <div class="split-code">
+          <article>
+            <header>GitHub source (reviewed)</header>
+            <pre class="code-block" id="heroSource"></pre>
+          </article>
+          <article>
+            <header>npm package (installed)</header>
+            <div class="scan-wrap">
+              <pre class="code-block" id="heroPackage"></pre>
+              <div class="scan-line" aria-hidden="true"></div>
+            </div>
+          </article>
+        </div>
+        <p class="panel-caption">The injected line never existed in the reviewed tree. Capabilities diverge even when most files still “look compiled”.</p>
+      </div>
+    </section>
+
+    <section class="section" id="problem">
+      <div class="section-head reveal">
+        <p class="eyebrow">The gap</p>
+        <h2>The toy in the box is not the blueprint</h2>
+        <p>People review GitHub. Machines install a tarball someone uploaded. Nothing forces those two to be the same.</p>
+      </div>
+
+      <div class="analogy-grid reveal">
+        <article class="glass card" data-spotlight>
+          <h3>Blueprint</h3>
+          <p>The GitHub tree reviewers actually read: source files, tests, a clean <code>package.json</code>.</p>
+        </article>
+        <article class="glass card warning-card" data-spotlight>
+          <h3>The box you open</h3>
+          <p>The npm tarball that lands in <code>node_modules</code>. It can contain extra scripts, extra files, extra powers.</p>
+        </article>
+      </div>
+
+      <div class="flow-diagram reveal" role="img" aria-label="Developer to GitHub to publish to npm to your machine. Attackers strike at publish.">
+        <div class="flow-step">Developer</div>
+        <span class="flow-arrow" aria-hidden="true"></span>
+        <div class="flow-step">GitHub<br><small>people review</small></div>
+        <span class="flow-arrow" aria-hidden="true"></span>
+        <div class="flow-step strike">
+          Build &amp; publish
+          <span class="strike-badge">Attackers strike here</span>
+        </div>
+        <span class="flow-arrow" aria-hidden="true"></span>
+        <div class="flow-step">npm registry</div>
+        <span class="flow-arrow" aria-hidden="true"></span>
+        <div class="flow-step">Your machine</div>
+      </div>
+
+      <div class="incident-grid">
+        <article class="glass card reveal" data-spotlight>
+          <p class="eyebrow">2024</p>
+          <h3>XZ backdoor</h3>
+          <p>The malicious part lived in release files, not in visible git history. Reviewing the repo was not enough.</p>
+        </article>
+        <article class="glass card reveal" data-spotlight>
+          <p class="eyebrow">Sept 2025</p>
+          <h3>npm account compromises</h3>
+          <p><code>debug</code> and <code>color-string</code>: stolen maintainer logins published poisoned versions while GitHub looked clean.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="why">
+      <div class="section-head reveal">
+        <p class="eyebrow">Why this is hard</p>
+        <h2>Two failing ideas, then the one that works</h2>
+      </div>
+      <div class="compare-approaches">
+        <article class="glass card dim-card reveal" data-spotlight>
+          <h3>Flag every difference</h3>
+          <p>Compiled <code>dist/</code>, LICENSE, and metadata always differ. Every package looks dangerous. The tool is useless.</p>
+        </article>
+        <article class="glass card dim-card reveal" data-spotlight>
+          <h3>Keep an allowlist</h3>
+          <p>Allow <code>dist/</code> and you miss injected lines. Ban extra files and the next honest project breaks. Allowlists rot.</p>
+        </article>
+        <article class="glass card accent-card reveal" data-spotlight>
+          <h3>PkgTruth: compare what code can do</h3>
+          <p>Clean builds stay LOW because capabilities are preserved. Tampering is caught when the package gains a power the source never had.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section" id="how">
+      <div class="section-head reveal">
+        <p class="eyebrow">Pipeline</p>
+        <h2>How it works</h2>
+        <p>Seven deterministic steps. The local model only explains afterward, and every quote is checked against the file.</p>
+      </div>
+
+      <div class="pipeline-toolbar reveal">
+        <button class="btn btn-primary" id="replayBtn" type="button">Replay a recorded run</button>
+        <p class="hint">Replay of a recorded run. This animation is not live analysis.</p>
+      </div>
+
+      <ol class="pipeline" id="pipeline"></ol>
+      <div class="pipeline-detail glass" id="pipelineDetail" tabindex="-1"></div>
+    </section>
+
+    <section class="section" id="core">
+      <div class="section-head reveal">
+        <p class="eyebrow">Core idea</p>
+        <h2>Capabilities, not text</h2>
+        <p>A package may have fewer capabilities than its source. Never more.</p>
+      </div>
+      <div class="graph-wrap glass reveal" data-spotlight>
+        <div class="graph-legend">
+          <span><i class="dot shared"></i> Present in both</span>
+          <span><i class="dot gained"></i> Gained power</span>
+        </div>
+        <svg id="capGraph" class="cap-graph" viewBox="0 0 900 420" role="img" aria-label="Source versus package capability graph"></svg>
+      </div>
+    </section>
+
+    <section class="section" id="playground">
+      <div class="section-head reveal">
+        <p class="eyebrow">Playground</p>
+        <h2>Tamper it yourself</h2>
+        <p>Client-side simulation of the scoring rules. Real analysis runs in the CLI.</p>
+      </div>
+
+      <div class="playground-grid">
+        <aside class="glass card reveal" data-spotlight>
+          <h3>Attack toggles</h3>
+          <p class="hint">Each switch adds a finding the real detectors would emit.</p>
+          <form id="attackForm" class="attack-form"></form>
+        </aside>
+        <div class="playground-result">
+          <div class="verdict-row glass reveal" data-spotlight>
+            <div class="gauge-wrap">
+              <svg id="playGauge" class="gauge" viewBox="0 0 120 120" aria-hidden="true"></svg>
+              <div class="gauge-label">
+                <strong id="playScore">0</strong>
+                <span>score</span>
+              </div>
+            </div>
+            <div>
+              <p class="sample-pill">Sample report · simulation</p>
+              <p class="verdict-badge" id="playVerdict" data-verdict="LOW">LOW</p>
+              <p id="playHeadline">No attacks enabled. Capabilities match the clean demo package.</p>
+            </div>
+          </div>
+          <div class="glass card reveal" data-spotlight>
+            <h3>Findings</h3>
+            <ul class="finding-list" id="playFindings"></ul>
+          </div>
+          <div class="glass card reveal" data-spotlight>
+            <h3>Capability graph</h3>
+            <svg id="playGraph" class="cap-graph cap-graph-sm" viewBox="0 0 900 420" role="img" aria-label="Playground capability graph"></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="analyzer">
+      <div class="section-head reveal">
+        <p class="eyebrow">Analyzer</p>
+        <h2>Load a PkgTruth report</h2>
+        <p>Drop a <code>report.json</code> produced by the CLI, or use a recorded sample. Nothing on this page calls a remote model.</p>
+      </div>
+
+      <div class="hero-input glass reveal" data-spotlight>
+        <div class="drop-zone" id="dropZone" tabindex="0" role="button" aria-label="Drop a report.json file here">
+          <strong>Drop report.json</strong>
+          <span>or click to choose a file</span>
+          <input type="file" id="fileInput" accept="application/json,.json" hidden>
+        </div>
+        <div class="demo-actions">
+          <button class="btn btn-primary" id="loadFileBtn" type="button">Load report.json</button>
+          <button class="btn btn-ghost" id="demoCleanBtn" type="button">Clean release</button>
+          <button class="btn btn-ghost" id="demoTamperedBtn" type="button">Tampered release</button>
+        </div>
+        <p class="hint" id="loadStatus">Sample reports are recordings, not live scans.</p>
+        <p class="error" id="loadError" hidden></p>
+      </div>
+
+      <div class="analyzer-tabs" role="tablist" aria-label="Analyzer views">
+        <button type="button" class="tab-btn is-active" role="tab" aria-selected="true" data-tab="inspect" id="tabInspect">Inspect</button>
+        <button type="button" class="tab-btn" role="tab" aria-selected="false" data-tab="compare" id="tabCompare">Compare</button>
+      </div>
+
+      <div id="inspectPanel">
+        <div class="verdict-banner glass" id="verdictBanner">
+          <div class="gauge-wrap">
+            <svg id="reportGauge" class="gauge" viewBox="0 0 120 120" aria-hidden="true"></svg>
+            <div class="gauge-label">
+              <strong id="reportScore">—</strong>
+              <span>score</span>
+            </div>
+          </div>
+          <div class="verdict-meta">
+            <p class="sample-pill" id="sampleLabel">Sample report</p>
+            <p class="verdict-badge" id="reportVerdict" data-verdict="LOW">LOW</p>
+            <h3 id="pkgTitle">pretty-kit@1.2.0</h3>
+            <p id="pkgHeadline"></p>
+            <dl class="meta-dl">
+              <div><dt>Repo</dt><dd id="pkgRepo">—</dd></div>
+              <div><dt>Commit</dt><dd id="pkgCommit" class="mono">—</dd></div>
+              <div><dt>Source</dt><dd id="pkgSource">—</dd></div>
+            </dl>
+          </div>
+        </div>
+
+        <div class="summary-grid" id="summaryCards"></div>
+
+        <article class="glass card" id="provenanceCard">
+          <h3>Provenance</h3>
+          <div class="badge-row" id="provenanceBadges"></div>
+          <ul class="note-list" id="provenanceNotes"></ul>
+        </article>
+
+        <article class="glass card" id="fileExplorer">
+          <div class="explorer-head">
+            <h3>File explorer</h3>
+            <label class="search-label">
+              <span class="sr-only">Search files</span>
+              <input type="search" id="fileSearch" placeholder="Search path">
+            </label>
+          </div>
+          <div class="chip-row" id="filterChips"></div>
+          <label class="toggle">
+            <input type="checkbox" id="hideIdentical">
+            Hide identical files
+          </label>
+          <div class="table-wrap">
+            <table class="file-table">
+              <thead>
+                <tr>
+                  <th><button type="button" data-sort="path">Path</button></th>
+                  <th><button type="button" data-sort="bucket">Bucket</button></th>
+                  <th><button type="button" data-sort="status">Status</button></th>
+                  <th>Explained by</th>
+                </tr>
+              </thead>
+              <tbody id="fileTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+        <article class="glass card" id="capDiff">
+          <div class="explorer-head">
+            <h3>Capability diff</h3>
+            <p class="gained-counter" id="gainedCounter">0 gained powers</p>
+          </div>
+          <div class="cap-columns" id="capColumns"></div>
+        </article>
+
+        <article class="glass card" id="aiPanel">
+          <h3>Local model explanations</h3>
+          <p class="ai-disclaimer">Supporting signal only. Scores come from deterministic rules.</p>
+          <p class="hint" id="aiStatus"></p>
+          <div id="aiExplanations"></div>
+        </article>
+      </div>
+
+      <div id="comparePanel" hidden>
+        <p class="hint">Side-by-side recorded samples so a judge can see the difference instantly.</p>
+        <div class="compare-split" id="compareSplit"></div>
+      </div>
+    </section>
+
+    <section class="section" id="benchmark">
+      <div class="section-head reveal">
+        <p class="eyebrow">Stretch</p>
+        <h2>Benchmark and history</h2>
+      </div>
+      <div class="glass card" id="benchmarkBody"></div>
+    </section>
+  </main>
+
+  <aside class="drawer" id="drawer" hidden>
+    <div class="drawer-backdrop" id="drawerBackdrop"></div>
+    <div class="drawer-panel" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+      <header>
+        <h3 id="drawerTitle">Evidence</h3>
+        <button type="button" class="icon-btn" id="drawerClose" aria-label="Close evidence drawer">Close</button>
+      </header>
+      <p class="mono" id="drawerPath"></p>
+      <div id="drawerFindings"></div>
+      <div class="code-viewer" id="drawerCode"></div>
+      <button type="button" class="btn btn-ghost" id="copyEvidence">Copy evidence</button>
+    </div>
+  </aside>
+
+  <footer class="footer">
+    <p>No full rebuild yet, so heavily bundled packages may score MEDIUM. Valid provenance lowers risk but does not prove safety. AI explanations are a supporting signal only.</p>
+    <p>
+      <a class="repo-link" href="#" data-repo-url="#">Repository (placeholder)</a>
+      · Built for Hacktoberfest 2026 Hack Day, Sonipat. Team NullPointers.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

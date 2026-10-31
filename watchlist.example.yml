@@ -1,0 +1,11 @@
+packages:
+  - ecosystem: npm
+    name: express
+  - ecosystem: npm
+    name: chalk
+  - ecosystem: npm
+    name: debug
+settings:
+  fail_on: medium
+  output_dir: ./reports
+  no_llm: false
