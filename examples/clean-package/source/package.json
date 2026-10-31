@@ -1,0 +1,16 @@
+{
+  "name": "clean-demo-pkg",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "test": "node tests/test.js"
+  },
+  "dependencies": {
+    "debug": "^4.3.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/example/sample-utility"
+  }
+}

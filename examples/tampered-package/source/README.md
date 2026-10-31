@@ -1,0 +1,1 @@
+# tampered-demo-pkg\nSample clean package source.\n

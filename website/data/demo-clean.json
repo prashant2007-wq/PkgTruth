@@ -1,0 +1,171 @@
+{
+  "schema_version": "1.0",
+  "package": {
+    "ecosystem": "npm",
+    "name": "pretty-kit",
+    "version": "1.2.0",
+    "repo": "https://github.com/example/pretty-kit",
+    "commit": "a1b2c3d4e5f6789012345678901234567890abcd",
+    "source_resolution": "provenance"
+  },
+  "summary": {
+    "verdict": "LOW",
+    "score": 8,
+    "headline": "Compiled dist/ matches source capabilities. Sourcemaps and project config explain every added file.",
+    "counts": {
+      "identical": 2,
+      "modified": 1,
+      "added": 4,
+      "missing": 3,
+      "explained": 5,
+      "suspicious": 0
+    }
+  },
+  "provenance": {
+    "attestation_present": true,
+    "repo_match": true,
+    "commit_match": true,
+    "notes": [
+      "npm provenance attestation present",
+      "Attested repository matches package.json repository.url",
+      "Attested commit matches gitHead"
+    ]
+  },
+  "capabilities": {
+    "source": {
+      "NETWORK": [],
+      "EXEC": [],
+      "EVAL": [],
+      "FS_SENSITIVE": [],
+      "ENV_ACCESS": ["process.env.NODE_ENV"],
+      "INSTALL_HOOK": [],
+      "NEW_DEPENDENCY": [],
+      "NATIVE_BINARY": [],
+      "DYNAMIC_REQUIRE": [],
+      "OBFUSCATION": []
+    },
+    "package": {
+      "NETWORK": [],
+      "EXEC": [],
+      "EVAL": [],
+      "FS_SENSITIVE": [],
+      "ENV_ACCESS": ["process.env.NODE_ENV"],
+      "INSTALL_HOOK": [],
+      "NEW_DEPENDENCY": [],
+      "NATIVE_BINARY": [],
+      "DYNAMIC_REQUIRE": [],
+      "OBFUSCATION": []
+    },
+    "gained": []
+  },
+  "files": [
+    {
+      "path": "README.md",
+      "bucket": "identical",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Byte-identical to the reviewed source file.",
+      "findings": []
+    },
+    {
+      "path": "src/index.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "TypeScript sources are omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "src/cli.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "TypeScript sources are omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "tsconfig.json",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Build config is omitted from the published tarball, which is expected.",
+      "findings": []
+    },
+    {
+      "path": "package.json",
+      "bucket": "modified",
+      "status": "explained",
+      "explained_by": "metadata_only",
+      "reason": "Differences are limited to publish-time fields: version, gitHead, _id, and dist integrity.",
+      "findings": []
+    },
+    {
+      "path": "LICENSE",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "LICENSE is listed in the package files field and contains no novel capabilities.",
+      "findings": []
+    },
+    {
+      "path": "dist/index.js",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "sourcemap",
+      "reason": "sourceMappingURL points at dist/index.js.map; sourcesContent matches src/index.ts.",
+      "findings": []
+    },
+    {
+      "path": "dist/index.js.map",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Sourcemap sits in tsconfig.json outDir (dist/) declared by the project.",
+      "findings": []
+    },
+    {
+      "path": "dist/cli.js",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "bin entry package.json.bin.pretty-kit maps to dist/cli.js inside the declared outDir.",
+      "findings": [
+        {
+          "id": "unexplained_file",
+          "severity": "low",
+          "rule": "containment",
+          "line": 4,
+          "snippet": "const mode = process.env.NODE_ENV || \"production\";",
+          "reason": "ENV read is present in source as well; counted at 10% because the file is EXPLAINED.",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "path": "dist/cli.js.map",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "sourcemap",
+      "reason": "Map sources list src/cli.ts, which exists in the repository.",
+      "findings": []
+    }
+  ],
+  "ai": {
+    "model": "qwen2.5-coder:7b",
+    "used": true,
+    "explanations": [
+      {
+        "file": "dist/cli.js",
+        "text": "This looks like ordinary compiled CLI glue. It reads NODE_ENV to pick a log level, which already exists in src/cli.ts. No new network, eval, or install hook appears in the published file.",
+        "quotes": [
+          {
+            "text": "const mode = process.env.NODE_ENV || \"production\";",
+            "line": 4,
+            "verified": true
+          }
+        ]
+      }
+    ]
+  },
+  "generated_at": "2026-10-31T18:04:00Z"
+}

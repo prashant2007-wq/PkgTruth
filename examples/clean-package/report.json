@@ -1,0 +1,115 @@
+{
+  "schema_version": "1.0",
+  "package": {
+    "ecosystem": "npm",
+    "name": "clean",
+    "version": "unknown",
+    "repo": "",
+    "commit": "",
+    "source_resolution": "local"
+  },
+  "summary": {
+    "verdict": "LOW",
+    "score": 5,
+    "headline": "Clean release: all capabilities and files match or are explained by source repository",
+    "counts": {
+      "identical": 1,
+      "modified": 2,
+      "added": 2,
+      "missing": 2,
+      "explained": 4,
+      "suspicious": 0
+    }
+  },
+  "provenance": {
+    "attestation_present": false,
+    "repo_match": null,
+    "commit_match": null,
+    "notes": [
+      "Local file analysis"
+    ]
+  },
+  "capabilities": {
+    "source": {},
+    "package": {},
+    "gained": []
+  },
+  "files": [
+    {
+      "path": "LICENSE",
+      "bucket": "identical",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "",
+      "findings": [],
+      "source_hash": "be673375fcf9ca4b9ccb1d4260b0cbb7b692bc9c0c32bf6fdffd74093c9ceb58",
+      "package_hash": "be673375fcf9ca4b9ccb1d4260b0cbb7b692bc9c0c32bf6fdffd74093c9ceb58"
+    },
+    {
+      "path": "README.md",
+      "bucket": "modified",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Standard distribution metadata file; All sensitive tokens and external strings are contained in source repository",
+      "findings": [],
+      "source_hash": "ee8e8383dbe7cdfa4d63e99714c8368bec8fa71fec6cf306e79d3900ae133ad3",
+      "package_hash": "9888e47761e7c5a31620e7432a821c185d06bbfb6de8bfd0151e1470b23f1242"
+    },
+    {
+      "path": "dist/index.js",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "sourcemap",
+      "reason": "Verified compiled output from source files via sourcemap: src/index.ts",
+      "findings": [],
+      "source_hash": "",
+      "package_hash": "d4f88bd6ba00ba28b9f23e78083bb2d3472ba0a20e915b9d3a1ddc45c87771b8"
+    },
+    {
+      "path": "dist/index.js.map",
+      "bucket": "added",
+      "status": "explained",
+      "explained_by": "config",
+      "reason": "Located within declared build output directory 'dist'; All sensitive tokens and external strings are contained in source repository",
+      "findings": [],
+      "source_hash": "",
+      "package_hash": "f953247074d7cf4fa9338ef5c8ea14b9ff77a9286ceb2212777ea948245a5d34"
+    },
+    {
+      "path": "package.json",
+      "bucket": "modified",
+      "status": "explained",
+      "explained_by": "metadata_only",
+      "reason": "Differences strictly confined to standard npm publish-time metadata fields",
+      "findings": [],
+      "source_hash": "e431ec244ce16d4da22a1354bac5168b9eb1d628f560c63c8315a556bf12dff2",
+      "package_hash": "cc521b5885840b10338f9f0dbef227e50e953f474ca0d0d2589a2ed5679583bf"
+    },
+    {
+      "path": "src/index.ts",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Omitted from package (typical for tests and documentation)",
+      "findings": [],
+      "source_hash": "cce07c86fec201d3dca15467dfda0c1023db110a46678abf4c3e5387e44243d8",
+      "package_hash": ""
+    },
+    {
+      "path": "tsconfig.json",
+      "bucket": "missing",
+      "status": "normal",
+      "explained_by": "none",
+      "reason": "Omitted from package (typical for tests and documentation)",
+      "findings": [],
+      "source_hash": "2de83e88aa8930db9454e3efddd5ee47d2272d593c78fab9b7d6f9a787073bba",
+      "package_hash": ""
+    }
+  ],
+  "ai": {
+    "model": "",
+    "used": false,
+    "explanations": []
+  },
+  "generated_at": "2026-10-31T17:57:58.027684+00:00"
+}
