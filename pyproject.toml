@@ -34,3 +34,6 @@ dev = [
 
 [project.scripts]
 pkgtruth = "pkgtruth.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["pkgtruth*"]
